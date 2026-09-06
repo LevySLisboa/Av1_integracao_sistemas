@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.models.entity.Aluno;
 import com.example.demo.models.entity.Professor;
 import com.example.demo.models.repository.Professores;
 
