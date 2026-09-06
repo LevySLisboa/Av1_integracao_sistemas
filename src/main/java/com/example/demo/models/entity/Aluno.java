@@ -5,6 +5,7 @@ import java.util.Date;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.example.demo.models.entity.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,13 +21,14 @@ public class Aluno extends BaseEntity {
 	@Column(nullable = false)
 	private String nome;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Column(nullable = false)
-	private Integer matricula;
+	@Column(unique = true)
+	private String matricula;
 
 	@Column(name = "data_nascimento", nullable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy", timezone = "America/Sao_Paulo")
 	private Date dataNascimento;
 
 	@Column(nullable = false)
@@ -52,11 +54,11 @@ public class Aluno extends BaseEntity {
 		this.nome = nome;
 	}
 
-	public Integer getMatricula() {
+	public String getMatricula() {
 		return matricula;
 	}
 
-	public void setMatricula(Integer matricula) {
+	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
 

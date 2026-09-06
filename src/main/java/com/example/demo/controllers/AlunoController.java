@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,17 @@ public class AlunoController {
 		if (aluno == null) {
 			throw new Exception("Não foi possivel criar um aluno com esses dados");
 		}
+
 		Aluno novoAluno = alunos.save(aluno);
 
+		SimpleDateFormat pegarAno = new SimpleDateFormat("yyyy");
+		String ano = pegarAno.format(novoAluno.getDataCriacao());
+
+		String matriculaGerada = novoAluno.getId() + "" + ano;
+
+		novoAluno.setMatricula(matriculaGerada);
+
+		alunos.save(novoAluno);
 		return ResponseEntity.ok(novoAluno);
 	}
 

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,7 @@ public abstract class BaseEntity implements Serializable {
 
 	@CreationTimestamp
 	@Column(name = "data_criacao", nullable = false, updatable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm", timezone = "America/Sao_Paulo")
 	private Date dataCriacao;
 
 	public Long getId() {
