@@ -2,6 +2,7 @@ package com.example.demo.models.entity;
 
 import java.util.Date;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.example.demo.models.entity.base.BaseEntity;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "aluno")
 @SQLRestriction("ativo = true")
+@SQLDelete(sql = "UPDATE aluno SET ativo = false WHERE id = ?")
 public class Aluno extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;

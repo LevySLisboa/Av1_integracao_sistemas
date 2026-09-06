@@ -40,7 +40,7 @@ public class AlunoController {
 		return ResponseEntity.ok(aluno);
 	}
 
-	@PostMapping
+	@PostMapping({ "", "/" })
 	public ResponseEntity<Aluno> criarAluno(@RequestBody Aluno aluno) throws Exception {
 		if (aluno == null) {
 			throw new Exception("Não foi possivel criar um aluno com esses dados");
