@@ -2,7 +2,7 @@
 
 API REST desenvolvida em **Java 17** com **Spring Boot**, destinada ao gerenciamento de alunos e professores.
 
-Projeto desenvolvido como parte da avaliação **AV1 da disciplina de Integração de Sistemas**.
+Projeto desenvolvido como parte da avaliação da disciplina **Técnicas de Integração de Sistemas**.
 
 ---
 
@@ -10,9 +10,7 @@ Projeto desenvolvido como parte da avaliação **AV1 da disciplina de Integraç�
 
 A aplicação está hospedada no **Render** e pode ser acessada através do endereço:
 
-👉 **[Acessar API](https://api-kjea.onrender.com)**
-
-> Substitua `SEU-HOST` pelo endereço disponibilizado pelo Render.
+https://api-kjea.onrender.com
 
 ---
 
