@@ -1,6 +1,6 @@
 # CRUD - AV1 Integração de Sistemas
 
-API REST desenvolvida em **Java 17** com **Spring Boot**, destinada ao gerenciamento de alunos e professores.
+API REST desenvolvida em **Java 17** com **Spring Boot**, destinada ao gerenciamento de alunos, professores e provas.
 
 Projeto desenvolvido como parte da avaliação da disciplina **Técnicas de Integração de Sistemas**.
 
@@ -10,7 +10,7 @@ Projeto desenvolvido como parte da avaliação da disciplina **Técnicas de Inte
 
 A aplicação está hospedada no **Render** e pode ser acessada através do endereço:
 
-https://api-kjea.onrender.com
+**https://api-kjea.onrender.com**
 
 ---
 
@@ -37,7 +37,7 @@ A API possui operações de gerenciamento para:
 - Listagem de alunos
 - Busca de aluno por matrícula
 - Atualização de alunos
-- Exclusão lógica de alunos
+- Exclusão de alunos
 
 ### 👨‍🏫 Professores
 
@@ -45,4 +45,47 @@ A API possui operações de gerenciamento para:
 - Listagem de professores
 - Busca de professor por matrícula
 - Atualização de professores
-- Exclusão lógica de professores
+- Exclusão de professores
+
+### 📝 Provas
+
+- Cadastro de provas
+- Listagem de provas
+- Busca de provas
+- Atualização de provas
+- Exclusão de provas
+- Associação de provas a alunos e a professores
+
+---
+
+## 🔗 Rotas da API
+
+### 👨‍🎓 Alunos
+
+| Método | Path |
+|---|---|
+| `POST` | `/aluno` |
+| `GET` | `/aluno` |
+| `GET` | `/aluno/{matricula}` |
+| `PUT` | `/aluno/{id}` |
+| `DELETE` | `/aluno/{id}` |
+
+### 👨‍🏫 Professores
+
+| Método | Path |
+|---|---|
+| `POST` | `/professor` |
+| `GET` | `/professor` |
+| `GET` | `/professor/{matricula}` |
+| `PUT` | `/professor/{id}` |
+| `DELETE` | `/professor/{id}` |
+
+### 📝 Provas
+
+| Método | Path |
+|---|---|
+| `POST` | `/prova` |
+| `GET` | `/prova` |
+| `GET` | `/prova/{id}` |
+| `PUT` | `/prova/{id}` |
+| `DELETE` | `/prova/{id}` |
