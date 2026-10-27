@@ -12,7 +12,7 @@
 
 AV2 · Técnicas de Integração de Sistemas · UNIFOR
 
-🌐 **Deploy:** https://SEU-SERVICO.onrender.com
+🌐 **Deploy:** https://frontend-y286.onrender.com
 
 </div>
 
