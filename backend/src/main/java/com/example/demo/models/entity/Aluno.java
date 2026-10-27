@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import com.example.demo.models.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,7 +56,8 @@ public class Aluno extends BaseEntity {
 
 	@Column(name = "pontuacao_media_geral", nullable = false)
 	@NotNull @PositiveOrZero
-	private Double pontuacaoMediaGeral;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private Double pontuacaoMediaGeral = 0.0;
 
 	public String getNome() {
 		return nome;

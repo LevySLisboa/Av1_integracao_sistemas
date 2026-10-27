@@ -27,6 +27,7 @@ import com.example.demo.models.repository.Professores;
 import com.example.demo.models.repository.Provas;
 import com.example.demo.security.UsuarioPrincipal;
 import com.example.demo.services.PermissaoService;
+import com.example.demo.services.PontuacaoMediaService;
 
 import jakarta.validation.Valid;
 
@@ -44,12 +45,15 @@ public class ProvaController {
 	private final Professores professores;
 	private final Alunos alunos;
 	private final PermissaoService permissao;
+	private final PontuacaoMediaService pontuacaoMedia;
 
-	public ProvaController(Provas provas, Professores professores, Alunos alunos, PermissaoService permissao) {
+	public ProvaController(Provas provas, Professores professores, Alunos alunos, PermissaoService permissao,
+			PontuacaoMediaService pontuacaoMedia) {
 		this.provas = provas;
 		this.professores = professores;
 		this.alunos = alunos;
 		this.permissao = permissao;
+		this.pontuacaoMedia = pontuacaoMedia;
 	}
 
 	@GetMapping({ "", "/" })
@@ -75,7 +79,9 @@ public class ProvaController {
 		prova.setId(null);
 		prova.setAtivo(true);
 		resolverReferencias(prova, usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(provas.save(prova));
+		Prova salva = provas.save(prova);
+		pontuacaoMedia.recalcular(salva.getAluno());
+		return ResponseEntity.status(HttpStatus.CREATED).body(salva);
 	}
 
 	@PutMapping({ "/{id}", "/{id}/" })
@@ -83,6 +89,7 @@ public class ProvaController {
 			@AuthenticationPrincipal UsuarioPrincipal usuario) {
 		Prova provaExistente = buscar(id);
 		permissao.exigirVerProva(usuario, provaExistente);
+		Aluno alunoAnterior = provaExistente.getAluno();
 		resolverReferencias(prova, usuario);
 
 		provaExistente.setDisciplina(prova.getDisciplina());
@@ -94,7 +101,12 @@ public class ProvaController {
 		provaExistente.setAluno(prova.getAluno());
 		provaExistente.setDataAplicacao(prova.getDataAplicacao());
 
-		return ResponseEntity.ok(provas.save(provaExistente));
+		Prova salva = provas.save(provaExistente);
+		pontuacaoMedia.recalcular(alunoAnterior);
+		if (!alunoAnterior.getId().equals(salva.getAluno().getId())) {
+			pontuacaoMedia.recalcular(salva.getAluno());
+		}
+		return ResponseEntity.ok(salva);
 	}
 
 	@DeleteMapping({ "/{id}", "/{id}/" })
@@ -102,6 +114,7 @@ public class ProvaController {
 		Prova prova = buscar(id);
 		permissao.exigirVerProva(usuario, prova);
 		provas.delete(prova);
+		pontuacaoMedia.recalcular(prova.getAluno());
 		return ResponseEntity.noContent().build();
 	}
 

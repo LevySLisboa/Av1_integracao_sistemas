@@ -98,7 +98,6 @@ public class AlunoController {
 		alunoExistente.setCpfCnpj(aluno.getCpfCnpj());
 		alunoExistente.setSemestreDeReferencia(aluno.getSemestreDeReferencia());
 		alunoExistente.setTelefone(aluno.getTelefone());
-		alunoExistente.setPontuacaoMediaGeral(aluno.getPontuacaoMediaGeral());
 
 		return ResponseEntity.ok(alunos.save(alunoExistente));
 	}

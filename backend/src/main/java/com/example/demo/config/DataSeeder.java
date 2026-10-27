@@ -21,9 +21,10 @@ import com.example.demo.models.repository.Alunos;
 import com.example.demo.models.repository.Professores;
 import com.example.demo.models.repository.Provas;
 import com.example.demo.models.repository.Usuarios;
+import com.example.demo.services.PontuacaoMediaService;
 
 /**
- * Popula o banco na primeira execução: 3 professores, 3 alunos, 3 provas e
+ * Popula o banco na primeira execução: 3 professores, 3 alunos, 9 provas e
  * (se as variáveis SEED_* estiverem definidas) usuários de demonstração.
  * Os dados pessoais abaixo são FICTÍCIOS. Senhas vêm do ambiente, nunca do código.
  */
@@ -38,6 +39,7 @@ public class DataSeeder implements CommandLineRunner {
 	private final Provas provas;
 	private final Usuarios usuarios;
 	private final PasswordEncoder encoder;
+	private final PontuacaoMediaService pontuacaoMedia;
 
 	@Value("${app.seed.admin-email:}")
 	private String adminEmail;
@@ -51,12 +53,13 @@ public class DataSeeder implements CommandLineRunner {
 	private String userSenha;
 
 	public DataSeeder(Professores professores, Alunos alunos, Provas provas, Usuarios usuarios,
-			PasswordEncoder encoder) {
+			PasswordEncoder encoder, PontuacaoMediaService pontuacaoMedia) {
 		this.professores = professores;
 		this.alunos = alunos;
 		this.provas = provas;
 		this.usuarios = usuarios;
 		this.encoder = encoder;
+		this.pontuacaoMedia = pontuacaoMedia;
 	}
 
 	@Override
@@ -67,19 +70,28 @@ public class DataSeeder implements CommandLineRunner {
 			criarProfessor("Roberto Alves", "roberto.alves@exemplo.edu", "333.333.333-33", "Matemática", "Estatística", "Doutor", 11000.0, 20, LocalDate.of(1983, 11, 5), LocalDate.of(2018, 1, 20));
 		}
 		if (alunos.count() == 0) {
-			criarAluno("Ana Souza", "ana.souza@exemplo.edu", "Ciência da Computação", "444.444.444-44", 5, "(85) 99999-0001", 8.4, LocalDate.of(2003, 4, 10));
-			criarAluno("Bruno Costa", "bruno.costa@exemplo.edu", "Sistemas de Informação", "555.555.555-55", 3, "(85) 99999-0002", 7.1, LocalDate.of(2004, 9, 22));
-			criarAluno("Carla Dias", "carla.dias@exemplo.edu", "Engenharia de Software", "666.666.666-66", 7, "(85) 99999-0003", 9.2, LocalDate.of(2002, 1, 15));
+			criarAluno("Ana Souza", "ana.souza@exemplo.edu", "Ciência da Computação", "444.444.444-44", 5, "(85) 99999-0001", LocalDate.of(2003, 4, 10));
+			criarAluno("Bruno Costa", "bruno.costa@exemplo.edu", "Sistemas de Informação", "555.555.555-55", 3, "(85) 99999-0002", LocalDate.of(2004, 9, 22));
+			criarAluno("Carla Dias", "carla.dias@exemplo.edu", "Engenharia de Software", "666.666.666-66", 7, "(85) 99999-0003", LocalDate.of(2002, 1, 15));
 		}
 		if (provas.count() == 0 && professores.count() >= 3 && alunos.count() >= 3) {
 			var p = professores.findAll();
 			var a = alunos.findAll();
 			// 02/11/2026 é feriado nacional (Finados): útil para demonstrar a integração
+			criarProva("Técnicas de Integração de Sistemas", 8.0, 1, "Fundamentos de integração", p.get(0), "N1", a.get(0), LocalDate.of(2026, 10, 26));
 			criarProva("Técnicas de Integração de Sistemas", 8.5, 2, "Autenticação e APIs REST", p.get(0), "N1", a.get(0), LocalDate.of(2026, 11, 2));
-			criarProva("Banco de Dados", 7.0, 1, "Modelagem relacional", p.get(1), "N2", a.get(1), LocalDate.of(2026, 11, 10));
+			criarProva("Técnicas de Integração de Sistemas", 9.0, 3, "Integração de serviços", p.get(0), "N1", a.get(0), LocalDate.of(2026, 11, 16));
+
+			criarProva("Banco de Dados", 7.0, 1, "Modelagem relacional", p.get(1), "N2", a.get(1), LocalDate.of(2026, 10, 27));
+			criarProva("Banco de Dados", 7.5, 2, "Consultas SQL", p.get(1), "N2", a.get(1), LocalDate.of(2026, 11, 10));
+			criarProva("Banco de Dados", 8.0, 3, "Normalização", p.get(1), "N2", a.get(1), LocalDate.of(2026, 11, 24));
+
+			criarProva("Estatística Aplicada", 8.0, 1, "Estatística descritiva", p.get(2), "N1", a.get(2), LocalDate.of(2026, 10, 28));
+			criarProva("Estatística Aplicada", 8.5, 2, "Distribuições", p.get(2), "N1", a.get(2), LocalDate.of(2026, 11, 11));
 			criarProva("Estatística Aplicada", 9.0, 3, "Probabilidade", p.get(2), "N1", a.get(2), LocalDate.of(2026, 12, 7));
 		}
 		criarUsuarios();
+		pontuacaoMedia.recalcularTodos();
 	}
 
 	private void criarUsuarios() {
@@ -141,7 +153,7 @@ public class DataSeeder implements CommandLineRunner {
 	}
 
 	private void criarAluno(String nome, String email, String curso, String cpf, int semestre, String tel,
-			double media, LocalDate nasc) {
+			LocalDate nasc) {
 		Aluno a = new Aluno();
 		a.setNome(nome);
 		a.setEmail(email);
@@ -149,7 +161,6 @@ public class DataSeeder implements CommandLineRunner {
 		a.setCpfCnpj(cpf);
 		a.setSemestreDeReferencia(semestre);
 		a.setTelefone(tel);
-		a.setPontuacaoMediaGeral(media);
 		a.setDataNascimento(data(nasc));
 		a = alunos.save(a);
 		a.setMatricula(a.getId() + "" + Year.now().getValue());

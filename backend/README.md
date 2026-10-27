@@ -59,7 +59,9 @@ notas) protegidos por perfil.
 | **Usuario** (login) | nome, email, senhaHash 🔒 (BCrypt, nunca exposta), papel, matricula vinculada, tentativas de falha, bloqueio, último login |
 
 🔒 = dado protegido (não aparece para perfis sem permissão). Exclusões são **lógicas** (`ativo=false`).
-O banco é populado automaticamente com **3 professores, 3 alunos e 3 provas** (`DataSeeder`).
+O banco é populado automaticamente com **3 professores, 3 alunos e 9 provas** (`DataSeeder`), incluindo AV1, AV2 e AV3 para cada aluno calcular seu PMG.
+
+O `pontuacaoMediaGeral` do aluno é calculado automaticamente como a média simples das médias das disciplinas que já possuem AV1, AV2 e AV3. A média da disciplina é `((AV1/2) + (AV2/2) + AV3) / 2`; disciplinas incompletas são ignoradas e, se nenhuma estiver completa, o PMG fica em `0`. O valor é recalculado ao criar, editar ou excluir provas e não deve ser informado manualmente.
 
 ---
 
