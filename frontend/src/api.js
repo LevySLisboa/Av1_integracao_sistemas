@@ -62,4 +62,9 @@ export const api = {
   reenviar: () => chamar('/auth/reenviar-codigo', { method: 'POST' }),
   logout: () => chamar('/auth/logout', { method: 'POST' }),
   testar: (path) => bruto(path),
+  // CRUD genérico (POST/PUT/DELETE enviam o token CSRF automaticamente)
+  listar: (path) => chamar(path),
+  criar: (path, body) => chamar(path, { method: 'POST', body }),
+  editar: (path, body) => chamar(path, { method: 'PUT', body }),
+  remover: (path) => chamar(path, { method: 'DELETE' }),
 };
