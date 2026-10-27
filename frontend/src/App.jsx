@@ -29,7 +29,7 @@ export default function App() {
       py={{ base: 'md', sm: 48 }}
       style={{ background: 'light-dark(var(--mantine-color-tinta-0), var(--mantine-color-dark-8))' }}
     >
-      <Container size={560}>
+      <Container size={etapa === 'logado' && usuario?.papel === 'ADMIN' ? 1100 : 560}>
         <Stack gap="lg">
           <div>
             <Title order={1} size="h2">
